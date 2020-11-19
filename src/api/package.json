@@ -1,0 +1,28 @@
+{
+  "name": "units-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "api.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node main",
+    "devstart": "nodemon main"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Cephs-Kitchen/unitConverter.git"
+  },
+  "author": "Alden Davidson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/Cephs-Kitchen/unitConverter/issues"
+  },
+  "homepage": "https://github.com/Cephs-Kitchen/unitConverter#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "pg": "^8.5.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.6"
+  }
+}
