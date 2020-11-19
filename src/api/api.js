@@ -9,5 +9,8 @@ const port = 3001;
 app.use(bodyParser.json());
 
 app.get('/units', db.getUnits);
+app.get('/units/type/:id', db.getUnitsByType);
+
+app.get('/units/:unitName', db.getUnitByName);
 
 app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
