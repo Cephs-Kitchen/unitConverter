@@ -13,4 +13,4 @@ app.get('/units/type/:id', db.getUnitsByType);
 
 app.get('/units/:unitName', db.getUnitByName);
 
-app.listen(port, () => console.log(`Example app listening at http://localhost:${port}`));
+app.listen(port, () => console.log(`UnitConverterAPI listening at http://localhost:${port}`));
