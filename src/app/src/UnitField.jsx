@@ -2,42 +2,47 @@ import './App.css';
 import React from 'react';
 
 class UnitSelector extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      volumes: [],
-      weights: [],
-      lengths: []
+  generateOption = (unit) => {
+    const name = unit.unit_name;
+    return (
+      <option key={name} value={name}>{name}</option>
+    );
+  }
+
+  generateOptGroups = (units, unitTypeName) => {
+    // if all types requested
+    if (units.length > 0) {
+      return (
+        <optgroup label={unitTypeName}>
+          {units.map(unit => this.generateOption(unit))}
+        </optgroup>
+      );
     }
   }
 
-  async componentDidMount() {
-    const response = await fetch('http://localhost:3001/units');
-    const json = await response.json();
-    const unitsVolume = json.filter(unit => unit.unit_type_id === 1).map(unit => unit.unit_name);
-    const unitsWeight = json.filter(unit => unit.unit_type_id === 3).map(unit => unit.unit_name);
-    const unitsLength = json.filter(unit => unit.unit_type_id === 4).map(unit => unit.unit_name);
-    this.setState({volumes: unitsVolume, weights: unitsWeight, lengths: unitsLength});
-  }
+  generateSelect = (units, onChangeFunc) => {
+    const volumes = units.filter(unit => unit.unit_type_id === 1);
+    const weights = units.filter(unit => unit.unit_type_id === 3);
+    const lengths = units.filter(unit => unit.unit_type_id === 4);
 
-  generateOptGroup = (unitType, units) => {
-    return (
-      <optgroup label={unitType}>
-        {units.map(unit => <option key={unit} value={unit}>{unit}</option>)}
-      </optgroup>
+    const volumeOptGroup = this.generateOptGroups(volumes, 'Volume');
+    const weightOptGroup = this.generateOptGroups(weights, 'Weight');
+    const lengthOptGroup = this.generateOptGroups(lengths, 'Length');
+    return(
+      <select name='unitsFrom' id='unitsFrom' onChange={onChangeFunc}>
+        {volumeOptGroup}
+        {weightOptGroup}
+        {lengthOptGroup}
+      </select>
     );
   }
 
   render() {
     return (
-      <div className='UnitField'>
+      <form className='UnitField' >
         <input type='text' defaultValue={this.props.fromAmt}/>
-        <select name='unitsFrom' id='unitsFrom'>
-          {this.generateOptGroup('Volume', this.state.volumes)}
-          {this.generateOptGroup('Weight', this.state.weights)}
-          {this.generateOptGroup('Length', this.state.lengths)}
-        </select>
-      </div>
+        {this.generateSelect(this.props.units, this.props.onChange)}
+      </form>
     );
   }
 }
