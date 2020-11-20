@@ -36,3 +36,14 @@
     transform: rotate(360deg);
   }
 }
+
+.UnitField {
+  display: flex;
+  flex-direction: column;
+  margin: 10px;
+}
+
+.UnitConverter {
+  display: flex;
+  align-items: center;
+}
