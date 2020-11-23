@@ -10,7 +10,7 @@ class UnitSelector extends React.Component {
   }
 
   generateOptGroups = (units, unitTypeName) => {
-    // if all types requested
+    // only return optgroup if there are entries in it
     if (units.length > 0) {
       return (
         <optgroup label={unitTypeName}>
@@ -40,8 +40,8 @@ class UnitSelector extends React.Component {
   render() {
     return (
       <form className='UnitField' >
-        <input type='text' defaultValue={this.props.fromAmt}/>
-        {this.generateSelect(this.props.units, this.props.onChange)}
+        <input type='number' step={0.01} min={0} value={this.props.amt} onChange={this.props.onInputChange}/>
+        {this.generateSelect(this.props.units, this.props.onUnitChange)}
       </form>
     );
   }
