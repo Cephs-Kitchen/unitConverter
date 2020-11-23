@@ -59,6 +59,14 @@ class App extends React.Component {
     return convertedInput;
   }
 
+  _truncateValues = (inputArr) => {
+    // round to two decimal places.
+    // Change the roundingConstant by magnitudes of 10 to adjust.
+    // Bigger = more decimals, smaller = less decimals
+    const roundingConst = 100;
+    return inputArr.map(input => Math.round((input + Number.EPSILON) * roundingConst) / roundingConst);
+  }
+
   // this function is essentially identical to handleUpdateInputTo,
   // except that it assumes "input" originates from the fromUnit
   handleUpdateInputFrom = (e) => {
@@ -66,7 +74,9 @@ class App extends React.Component {
     // if input is invalid, input will be an empty string
     if (input.length > 0) {
       input = Number(input);
-      const convertedInput = this._getConvertedValue(input, true);
+      let convertedInput = this._getConvertedValue(input, true);
+      // truncate both values to 2 decimals
+      [input, convertedInput] = this._truncateValues([input, convertedInput]);
       this.setState({fromAmt: input, toAmt: convertedInput});
     }
   }
@@ -78,7 +88,9 @@ class App extends React.Component {
     // if input is invalid, input will be an empty string
     if (input.length > 0) {
       input = Number(input);
-      const convertedInput = this._getConvertedValue(input, false);
+      let convertedInput = this._getConvertedValue(input, false);
+      // truncate both values to 2 decimals
+      [input, convertedInput] = this._truncateValues([input, convertedInput]);
       this.setState({fromAmt: convertedInput, toAmt: input});
     }
   }
