@@ -33,38 +33,31 @@ class App extends React.Component {
     const unitName = e.target.value;
     const selectedUnit = this.state.units.find(unit => unit.unit_name === unitName);
     const toUnits = this.state.units.filter(unit => unit.unit_type_id === selectedUnit.unit_type_id);
-    this.setState({curFromUnit: selectedUnit, toUnits: toUnits});
+    // reset toUnit if a new unit type is selected
+    let newToUnit;
+    if (toUnits.includes(this.state.curToUnit)) {
+      newToUnit = this.state.curToUnit;
+    } else {
+      newToUnit = toUnits[0];
+    }
+
+    // update values in input fields to match new units
+    let newToAmt = this._getConvertedValue(this.state.fromAmt, true, selectedUnit.unit_base_equivalent, newToUnit.unit_base_equivalent);
+    newToAmt = this._roundValue(newToAmt);
+
+    this.setState({toAmt: newToAmt, curFromUnit: selectedUnit, curToUnit: newToUnit, toUnits: toUnits});
   }
 
   handleToUnitSelection = (e) => {
     // update which unit is selected to convert to
     const unitName = e.target.value;
     const selectedUnit = this.state.units.find(unit => unit.unit_name === unitName);
-    this.setState({curToUnit: selectedUnit});
-  }
 
-  _getConvertedValue = (input, inputIsFromUnit) => {
-    let startEqv, endEqv;
-    if (inputIsFromUnit) {
-      startEqv = this.state.curFromUnit.unit_base_equivalent;
-      endEqv = this.state.curToUnit.unit_base_equivalent;
-    } else {
-      startEqv = this.state.curToUnit.unit_base_equivalent;
-      endEqv = this.state.curFromUnit.unit_base_equivalent;
-    }
-    // multiply input by startEqv to convert to base_equivalent
-    const interimValue = input * startEqv;
-    // then divide by endEqv to convert back into a regular unit
-    const convertedInput = interimValue / endEqv;
-    return convertedInput;
-  }
+    // update values in input fields to match new units
+    let newToAmt = this._getConvertedValue(this.state.fromAmt, true, this.state.curFromUnit.unit_base_equivalent, selectedUnit.unit_base_equivalent);
+    newToAmt = this._roundValue(newToAmt);
 
-  _truncateValues = (inputArr) => {
-    // round to two decimal places.
-    // Change the roundingConstant by magnitudes of 10 to adjust.
-    // Bigger = more decimals, smaller = less decimals
-    const roundingConst = 100;
-    return inputArr.map(input => Math.round((input + Number.EPSILON) * roundingConst) / roundingConst);
+    this.setState({toAmt: newToAmt, curToUnit: selectedUnit});
   }
 
   // this function is essentially identical to handleUpdateInputTo,
@@ -76,7 +69,7 @@ class App extends React.Component {
       input = Number(input);
       let convertedInput = this._getConvertedValue(input, true);
       // truncate both values to 2 decimals
-      [input, convertedInput] = this._truncateValues([input, convertedInput]);
+      [input, convertedInput].forEach(val => this._roundValue(val));
       this.setState({fromAmt: input, toAmt: convertedInput});
     }
   }
@@ -90,9 +83,38 @@ class App extends React.Component {
       input = Number(input);
       let convertedInput = this._getConvertedValue(input, false);
       // truncate both values to 2 decimals
-      [input, convertedInput] = this._truncateValues([input, convertedInput]);
+      [input, convertedInput].forEach(val => this._roundValue(val));
       this.setState({fromAmt: convertedInput, toAmt: input});
     }
+  }
+
+  _getConvertedValue = (input,
+                        inputIsFromUnit,
+                        fromEqv=this.state.curFromUnit.unit_base_equivalent,
+                        toEqv=this.state.curToUnit.unit_base_equivalent) =>
+  {
+    let startEqv, endEqv;
+    console.log("Input:", input, "fromEqv:", fromEqv, "toEqv", toEqv);
+    if (inputIsFromUnit) {
+      startEqv = fromEqv;
+      endEqv = toEqv;
+    } else {
+      startEqv = toEqv;
+      endEqv = fromEqv;
+    }
+    // multiply input by startEqv to convert to base_equivalent
+    const interimValue = input * startEqv;
+    // then divide by endEqv to convert back into a regular unit
+    const convertedInput = interimValue / endEqv;
+    return convertedInput;
+  }
+
+  _roundValue = (value) => {
+    // round to two decimal places.
+    // Change the roundingConstant by magnitudes of 10 to adjust.
+    // Bigger = more decimals, smaller = less decimals
+    const roundingConst = 100;
+    return Math.round((value + Number.EPSILON) * roundingConst) / roundingConst;
   }
 
   render() {
