@@ -4,11 +4,12 @@ const cors = require('cors');
 
 const express = require('express');
 const app = express();
-const port = 3001;
+const port = 3333;
 
 
 // Then use it before your routes are set up:
 app.use(cors());
+app.options('*', cors());
 app.use(bodyParser.json());
 
 app.get('/units', db.getUnits);

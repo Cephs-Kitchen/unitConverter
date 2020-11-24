@@ -8,6 +8,6 @@ COPY . /src/api
 
 RUN npm install
 
-EXPOSE 3001
+EXPOSE 3333
 
 CMD ["npm", "start"]
