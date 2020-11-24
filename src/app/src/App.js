@@ -1,4 +1,4 @@
-import './App.css';
+import './Assets/App.css';
 import React from 'react';
 import UnitField from './UnitField';
 
@@ -119,7 +119,7 @@ class App extends React.Component {
 
   render() {
     return (
-      <div className="App-header">
+      <div className="App-header container">
         <h1>Unit Converter</h1>
         <div className='UnitConverter'>
           <UnitField amt={this.state.fromAmt} units={this.state.fromUnits} onUnitChange={this.handleFromUnitSelection} onInputChange={this.handleUpdateInputFrom}/>

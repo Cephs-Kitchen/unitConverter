@@ -1,4 +1,3 @@
-import './App.css';
 import React from 'react';
 
 class UnitSelector extends React.Component {

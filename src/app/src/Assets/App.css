@@ -1,3 +1,5 @@
+@import 'color-scheme.css';
+
 .App {
   text-align: center;
 }
@@ -14,7 +16,7 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-color: var(--color-app-background);
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -46,4 +48,13 @@
 .UnitConverter {
   display: flex;
   align-items: center;
+}
+
+h1 {
+  color: var(--color-header-text);
+}
+
+select {
+  fill: var(--color-button-fill);
+  color: var(--color-button-text);
 }
