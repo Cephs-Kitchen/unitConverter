@@ -16,7 +16,7 @@
 }
 
 .App-header {
-  background-color: var(--color-app-background);
+  /* background-color: var(--color-app-background); */
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -52,4 +52,10 @@
 
 h1 {
   color: var(--color-header-text);
+}
+
+button {
+  font-size: 25px;
+  color: var(--color-button-text);
+  border-color: var(--color-button-border);
 }
