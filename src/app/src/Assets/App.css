@@ -53,8 +53,3 @@
 h1 {
   color: var(--color-header-text);
 }
-
-select {
-  fill: var(--color-button-fill);
-  color: var(--color-button-text);
-}
