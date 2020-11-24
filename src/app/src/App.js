@@ -1,4 +1,4 @@
-import './Assets/App.css';
+import './style/App.css';
 import React from 'react';
 import UnitField from './UnitField';
 
@@ -69,7 +69,8 @@ class App extends React.Component {
       input = Number(input);
       let convertedInput = this._getConvertedValue(input, true);
       // truncate both values to 2 decimals
-      [input, convertedInput].forEach(val => this._roundValue(val));
+      input = this._roundValue(input);
+      convertedInput = this._roundValue(convertedInput);
       this.setState({fromAmt: input, toAmt: convertedInput});
     }
   }
@@ -83,7 +84,8 @@ class App extends React.Component {
       input = Number(input);
       let convertedInput = this._getConvertedValue(input, false);
       // truncate both values to 2 decimals
-      [input, convertedInput].forEach(val => this._roundValue(val));
+      input = this._roundValue(input);
+      convertedInput = this._roundValue(convertedInput);
       this.setState({fromAmt: convertedInput, toAmt: input});
     }
   }
@@ -94,7 +96,6 @@ class App extends React.Component {
                         toEqv=this.state.curToUnit.unit_base_equivalent) =>
   {
     let startEqv, endEqv;
-    console.log("Input:", input, "fromEqv:", fromEqv, "toEqv", toEqv);
     if (inputIsFromUnit) {
       startEqv = fromEqv;
       endEqv = toEqv;
