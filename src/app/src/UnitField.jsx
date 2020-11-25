@@ -4,7 +4,7 @@ class UnitSelector extends React.Component {
   generateOption = (unit) => {
     const name = unit.unit_name;
     return (
-      <option key={name} value={name}>{name}</option>
+      <option key={name} value={name} selected={this.props.selectedUnit.unit_name === name ? true : false}>{name}</option>
     );
   }
 

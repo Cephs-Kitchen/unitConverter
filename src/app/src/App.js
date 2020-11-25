@@ -18,13 +18,14 @@ class App extends React.Component {
 
   async componentDidMount() {
     // fetch all units from database
-    const response = await fetch('http://localhost:3333/units');
+    const response = await fetch('http://localhost:3333/units', {method:'GET'});
     const json = await response.json();
     // unit at index zero will always show first, so set it as selected
-    const initialFromUnit = json[0];
+    const initialFromUnit = await json[0];
     // ensure the toUnits match what has been "selected" at init-time
-    const toUnits = json.filter(unit => unit.unit_type_id === initialFromUnit.unit_type_id);
-    const initialToUnit = toUnits[0];
+    const toUnits = await json.filter(unit => unit.unit_type_id === initialFromUnit.unit_type_id);
+    const initialToUnit = await toUnits[0];
+    console.log(response, json, initialFromUnit, toUnits, initialToUnit);
     this.setState({curFromUnit: initialFromUnit, curToUnit: initialToUnit, units: json, fromUnits: json, toUnits: toUnits});
   }
 
@@ -92,15 +93,15 @@ class App extends React.Component {
 
   handleClickSwap = (e) => {
     // swap curToUnit and curFromUnit
-    const curToUnit = this.state.curToUnit;
-    const curFromUnit = this.state.curFromUnit;
+    const toUnit = this.state.curToUnit;
+    const fromUnit = this.state.curFromUnit;
 
     // update toAmt
     // curToUnit and curFromUnit are swapped in the params because they will be once we set state
-    let newToAmt = this._getConvertedValue(this.state.fromAmt, true, curToUnit.unit_base_equivalent, curFromUnit.unit_base_equivalent);
+    let newToAmt = this._getConvertedValue(this.state.fromAmt, true, toUnit.unit_base_equivalent, fromUnit.unit_base_equivalent);
     newToAmt = this._roundValue(newToAmt);
 
-    this.setState({toAmt: newToAmt, curFromUnit: curToUnit, curToUnit: curFromUnit});
+    this.setState({toAmt: newToAmt, curFromUnit: toUnit, curToUnit: fromUnit});
   }
 
   _getConvertedValue = (input,
@@ -136,9 +137,9 @@ class App extends React.Component {
       <div className="App-header container">
         <h1>Unit Converter</h1>
         <div className='UnitConverter'>
-          <UnitField amt={this.state.fromAmt} units={this.state.fromUnits} onUnitChange={this.handleFromUnitSelection} onInputChange={this.handleUpdateInputFrom}/>
+          <UnitField amt={this.state.fromAmt} selectedUnit={this.state.curFromUnit} units={this.state.fromUnits} onUnitChange={this.handleFromUnitSelection} onInputChange={this.handleUpdateInputFrom}/>
           <button type="button" onClick={this.handleClickSwap}>&#x021c4;</button>
-          <UnitField amt={this.state.toAmt} units={this.state.toUnits} onUnitChange={this.handleToUnitSelection} onInputChange={this.handleUpdateInputTo}/>
+          <UnitField amt={this.state.toAmt} selectedUnit={this.state.curToUnit} units={this.state.toUnits} onUnitChange={this.handleToUnitSelection} onInputChange={this.handleUpdateInputTo}/>
         </div>
       </div>
     );
