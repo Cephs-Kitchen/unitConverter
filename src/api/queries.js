@@ -4,7 +4,7 @@ const pool = new Pool({
   host: 'database',
   database: "cephs_citchen",
   password: "ceph",
-  port: 5433,
+  port: 5432,
 });
 
 const getUnits = (req, res) => {
